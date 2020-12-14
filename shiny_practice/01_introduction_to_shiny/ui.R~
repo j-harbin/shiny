@@ -1,4 +1,4 @@
-# Structure of ui (intro)
+# Structure of ui
 
 library(shiny)
 
