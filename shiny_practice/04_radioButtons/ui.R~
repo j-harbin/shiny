@@ -1,0 +1,19 @@
+library(shiny)
+
+shinyUI(fluidPage(
+        titlePanel("Demonstration of textInput widget in shiny"),
+        sidebarLayout(
+                      sidebarPanel(("Enter the personal information"),
+                                   textInput("name", "Enter your name",""),
+                                             textInput("age", "Enter your age", ""),
+                      radioButtons("gender","Select the gender", list("Male","Female"), "")),
+                                   mainPanel(("Personal Information"),
+                                   textOutput("myname"),
+                                   textOutput("myage"),
+                                   textOutput("mygender")
+                      )
+                      )))
+
+#textOuput is ind of saying to print the output from server into the main panel.
+# Made textInput variable in ui, made output variable based on that in server.R, then told textOutput to print the server output.
+# radioButton, first arg = ID, section = text above, third= options, fourth = default

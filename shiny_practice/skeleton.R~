@@ -1,0 +1,13 @@
+library(shiny)
+
+shinyUI(fluidPage
+        titlePanel("main title"),
+        sidebarLayout(
+                      sidebarPanel("sidebar Panel"),
+                      mainPanel("main Panel")
+        )
+        )
+
+shinyServer(function(input,output) {
+
+        })

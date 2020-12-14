@@ -1,0 +1,3 @@
+ui contains layout, appearance, widgets (that captures user input), displayes the output, e.g., the title, page layout, text inout, radio buttons, drop down menues, etc.
+
+server contains set of instructions that uses the input provided by the user, process them and produces the required output which is further displayed by ui.r script.
