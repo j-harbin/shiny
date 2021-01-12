@@ -5,7 +5,7 @@ shinyServer(function(input, output){
                     data("index")
                     plot(index, col=input$color) })
                 output$not <- renderPlot({
-                    plot(1,1, col=input$color)
+                    plot(1:10, col=input$color, pch=input$pch)
                 })
 })
 

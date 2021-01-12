@@ -6,6 +6,7 @@ shinyUI(fluidPage(
                   sidebarLayout(
                                 sidebarPanel(
                                              conditionalPanel(condition="input.tabselected==1", selectInput("action", "Select the action for your path", choices=c("End" = 1, "Start" = 2, "Profiles"= 3), selected=c("Profiles"))),
+                                             conditionalPanel(condition="input.tabselected==2", radioButtons("pch", "select your pch", choices=c("20", "21","1"), selected=c("20"))),
                                              radioButtons("color", "Select actions for Path of an Argo profiling float", choices=c("red", "green", "blue"), selected="red")),
                                                           mainPanel(
 tabsetPanel(type="tab",
