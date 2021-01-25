@@ -1,0 +1,10 @@
+ server =
+ function(input, output, session) {
+   output$uiExample <- renderUI({
+     tags$span(tipify(bsButton("pB2", "Button", style = "inverse", size = "extra-small"),
+         "year")
+     )
+   })
+ output$year <- renderUI({
+tags$span(tipify(bsTooltip(id="year", title="YYYY-MM-DD", trigger="hover")))})
+ }

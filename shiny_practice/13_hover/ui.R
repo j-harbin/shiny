@@ -1,0 +1,12 @@
+library(shiny)
+library(shinyBS)
+
+ ui =
+ fluidPage(
+   sidebarLayout(
+     sidebarPanel(),
+     mainPanel(
+       uiOutput("uiExample")
+     )
+   )
+ )
