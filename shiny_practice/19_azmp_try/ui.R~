@@ -1,0 +1,20 @@
+library(shiny)
+library(azmpdata)
+library(leaflet)
+
+shinyUI(fluidPage(
+
+                  titlePanel("GUI for azmpdata package."),
+                  shiny::mainPanel(
+tabsetPanel(type="tab",
+            tabPanel("Map", value=1, leaflet::leafletOutput("map")),
+            tabPanel("Parameters", value=2, plotOutput("parameters")),
+id = "tabselected")
+
+                                                          )
+                                                          ))
+# First, add tabPanel in mainPanel(tabsetPanel)
+# then add id for that tabPanel
+# Then add conditionalPanel for sidebar Panel if it is selected to add the choices in, which is based on the id for the tabPanel
+# Then tell it what to do in server.R
+
