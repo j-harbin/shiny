@@ -17,7 +17,9 @@ shinyUI <- fluidPage(
                                 sidebarPanel(
                                              conditionalPanel(condition="input.tabselected==1", shiny::actionButton("help", "Help"),
                                                               shiny::actionButton("code","Code")),
-                                             conditionalPanel(condition="input.tabselected==2", shiny::radioButtons("type", "Select your type of parameter", choices=c("Physical", "Chemical", "Biological"), selected=c("Physical")))),
+                                             conditionalPanel(condition="input.tabselected==2", shiny::radioButtons("type", "Select your type of parameter", choices=c("Physical", "Chemical", "Biological"), selected=c("Physical"))),
+                                             conditionalPanel(condition="input.tabselected==2 && \"physical\" == input.type",
+                                                               shiny::selectInput("physical","Physical Analysis", choices=c("Temperature","Salinity"), selected=NULL))),
                                                           mainPanel(
 tabsetPanel(type="tab",
             tabPanel("Map", value=1, leaflet::leafletOutput("map")),
@@ -32,13 +34,11 @@ shinyServer <- shiny::shinyServer(function(input, output){
                     azmpdata::azmpmap()
                    })
 
-                output$temperature1 <- renderPlot({
                     output$temperature1 <- renderPlot({
                             plot(Discrete_Annual_Broadscale$year, Discrete_Annual_Broadscale$sea_temperature,xlab= "Year", ylab="Broadscale Annual Sea Temperature (C)", pch=20, type='o', main="Discrete Annual Broadscale Temperature Analysis")
                             regression <- lm(Discrete_Annual_Broadscale$sea_temperature ~ Discrete_Annual_Broadscale$year)
                             abline(regression, h=50, col='red')
                     })
-                })
 
                 shiny::observeEvent(input$help,
                                     {
