@@ -49,7 +49,12 @@ id = "tabselected"),
                                                                     conditionalPanel(condition="input.tabselected == 2 && input.type == \"Chemical\" && \"Nitrate\" == input.chemical",
                                                                                      plotOutput("nitrate1"),
                                                                                      plotOutput("nitrate2")
+                                                                                     ),
+                                                                      conditionalPanel(condition="input.tabselected == 2 && input.type == \"Chemical\" && \"Silicate\" == input.chemical",
+                                                                                     plotOutput("silicate1"),
+                                                                                     plotOutput("silicate2")
                                                                                      )
+
 
                                                           )))
 
@@ -182,6 +187,42 @@ legend("bottomleft", c("LL", "HL", "BBL", "CSL"), pch=c(20,20,20,20), col=c("bla
                     legend("bottomleft", c("HL2", "P5"), pch=c(20,20), col=c("black", "red"))
 
                 })
+
+
+                 output$silicate1 <- renderPlot({
+                    CSLsi <- Discrete_Occupations_Sections$silicate[which(Discrete_Occupations_Sections$station %in% c("CSL1",  "CSL2",  "CSL3",  "CSL4",  "CSL5",  "CSL6"))]
+CSLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("CSL1",  "CSL2",  "CSL3",  "CSL4",  "CSL5",  "CSL6"))]
+## LL
+LLsi <- Discrete_Occupations_Sections$silicate[which(Discrete_Occupations_Sections$station %in% c("LL1",   "LL2",   "LL4",   "LL5",   "LL6", "LL7",   "LL8",  "LL3",   "LL9"))]
+LLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("LL1",   "LL2",   "LL4",   "LL5",   "LL6", "LL7",   "LL8",  "LL3",   "LL9"))]
+## HL
+HLsi <- Discrete_Occupations_Sections$silicate[which(Discrete_Occupations_Sections$station %in% c("HL1","HL2","HL3", "HL4", "HL5", "HL6","HL7","HL5.5", "HL3.3", "HL6.3", "HL6.7"))]
+HLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("HL1","HL2","HL3", "HL4", "HL5", "HL6","HL7","HL5.5", "HL3.3", "HL6.3", "HL6.7"))]
+#BBL
+BBLsi <- Discrete_Occupations_Sections$silicate[which(Discrete_Occupations_Sections$station %in% c("BBL1","BBL2", "BBL3","BBL4","BBL5","BBL6","BBL7"))]
+BBLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("BBL1","BBL2", "BBL3","BBL4","BBL5","BBL6","BBL7"))]
+
+plot(LLsi,LLd, ylim=rev(range(CSLd,LLd, HLd, BBLd, na.rm=TRUE)), xlim=range(CSLsi,LLsi, HLsi, BBLsi, na.rm=TRUE), xlab = "Silicate", ylab="Depth", pch=20, type="p", main="Occupations Sections Silicate")
+points(HLsi, HLd, pch=20, col="red")
+points(BBLsi, BBLd, pch=20, col="green")
+points(CSLsi, CSLd, pch=20, col="blue")
+legend("bottomleft", c("LL", "HL", "BBL", "CSL"), pch=c(20,20,20,20), col=c("black", "red", "green", "blue"))
+                  })
+                
+
+                output$silicate2 <- renderPlot({
+                    #HL2
+                    HL2si <- Discrete_Occupations_Stations$salinity[which(Discrete_Occupations_Stations$station == "HL2")]
+                    HL2d <- Discrete_Occupations_Stations$depth[which(Discrete_Occupations_Stations$station == "HL2")]
+                    # P5
+                    P5si <- Discrete_Occupations_Stations$salinity[which(Discrete_Occupations_Stations$station == "P5")]
+                    P5d <- Discrete_Occupations_Stations$depth[which(Discrete_Occupations_Stations$station == "P5")]
+                    plot(HL2si,HL2d, ylim=rev(range(HL2d,P5d, na.rm=TRUE)), xlim=range(HL2si, P5si, na.rm=TRUE), xlab = "Silicate", ylab="Depth", pch=20, type="p", main="Occupations Stations Silicate")
+                    points(P5si, P5d, pch=20, col="red")
+                    legend("bottomleft", c("HL2", "P5"), pch=c(20,20), col=c("black", "red"))
+
+                })
+
 
 
 
