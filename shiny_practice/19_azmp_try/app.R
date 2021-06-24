@@ -27,7 +27,9 @@ tabsetPanel(type="tab",
 id = "tabselected"),
 
                                                                     conditionalPanel(condition="input.tabselected==2 && \"Temperature\" == input.physical",
-                                                                                     plotOutput("temperature1")
+                                                                                     plotOutput("temperature1"),
+                                                                                     plotOutput("temperature2"),
+                                                                                     plotOutput("temperature3")
 
                                                                                      )
 
@@ -50,6 +52,44 @@ shinyServer <- shiny::shinyServer(function(input, output){
                                         msg <- shiny::HTML(overallHelp)
                                         shiny::showModal(shiny::modalDialog(shiny::HTML(msg), title="Using this application", size="l"))
                                     })
+
+                output$temperature2 <- renderPlot({
+                    library(azmpdata)
+                    #unique(Discrete_Occupations_Sections$section)
+                    # CSL
+                    CSLt <- Discrete_Occupations_Sections$temperature[which(Discrete_Occupations_Sections$station %in% c("CSL1",  "CSL2",  "CSL3",  "CSL4",  "CSL5",  "CSL6"))]
+                    CSLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("CSL1",  "CSL2",  "CSL3",  "CSL4",  "CSL5",  "CSL6"))]
+                    ## LL
+                    LLt <- Discrete_Occupations_Sections$temperature[which(Discrete_Occupations_Sections$station %in% c("LL1",   "LL2",   "LL4",   "LL5",   "LL6", "LL7",   "LL8",  "LL3",   "LL9"))]
+                    LLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("LL1",   "LL2",   "LL4",   "LL5",   "LL6", "LL7",   "LL8",  "LL3",   "LL9"))]
+                    ## HL
+                    HLt <- Discrete_Occupations_Sections$temperature[which(Discrete_Occupations_Sections$station %in% c("HL1","HL2","HL3", "HL4", "HL5", "HL6","HL7","HL5.5", "HL3.3", "HL6.3", "HL6.7"))]
+                    HLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("HL1","HL2","HL3", "HL4", "HL5", "HL6","HL7","HL5.5", "HL3.3", "HL6.3", "HL6.7"))]
+                    #BBL
+                    BBLt <- Discrete_Occupations_Sections$temperature[which(Discrete_Occupations_Sections$station %in% c("BBL1","BBL2", "BBL3","BBL4","BBL5","BBL6","BBL7"))]
+                    BBLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("BBL1","BBL2", "BBL3","BBL4","BBL5","BBL6","BBL7"))]
+
+                    plot(LLt,LLd, ylim=rev(range(CSLd,LLd, HLd, BBLd, na.rm=TRUE)), xlim=range(CSLt,LLt, HLt, BBLt, na.rm=TRUE), xlab = "Temperature (C)", ylab="Depth", pch=20, type="p", main="Occupations Sections Temperature")
+                    points(HLt, HLd, pch=20, col="red")
+                    points(BBLt, BBLd, pch=20, col="green")
+                    points(CSLt, CSLd, pch=20, col="blue")
+                    legend("bottomright", c("LL", "HL", "BBL", "CSL"), pch=c(20,20,20,20), col=c("black", "red", "green", "blue"))
+                })
+
+                output$temperature3 <- renderPlot({
+                    #unique(Discrete_Occupations_Stations$station)
+                    #HL2
+                    HL2t <- Discrete_Occupations_Stations$sea_temperature[which(Discrete_Occupations_Stations$station == "HL2")]
+                    HL2d <- Discrete_Occupations_Stations$depth[which(Discrete_Occupations_Stations$station == "HL2")]
+                    # P5
+                    P5t <- Discrete_Occupations_Stations$sea_temperature[which(Discrete_Occupations_Stations$station == "P5")]
+                    P5d <- Discrete_Occupations_Stations$depth[which(Discrete_Occupations_Stations$station == "P5")]
+                    plot(HL2t,HL2d, ylim=rev(range(HL2d,P5d, na.rm=TRUE)), xlim=range(HL2t, P5t, na.rm=TRUE), xlab = "Temperature (C)", ylab="Depth", pch=20, type="p", main="Occupations Stations Temperature")
+                    points(P5t, P5d, pch=20, col="red")
+                    legend("bottomright", c("HL2", "P5"), pch=c(20,20), col=c("black", "red"))
+                  })
+
+
 })
 
 
