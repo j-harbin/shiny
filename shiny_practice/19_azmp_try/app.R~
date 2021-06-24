@@ -19,18 +19,36 @@ shinyUI <- fluidPage(
                                                               shiny::actionButton("code","Code")),
                                              conditionalPanel(condition="input.tabselected==2", shiny::radioButtons("type", "Select your type of parameter", choices=c("Physical", "Chemical", "Biological"), selected=c("Physical"))),
                                              conditionalPanel(condition="input.tabselected==2 && \"Physical\" == input.type",
-                                                               shiny::selectInput("physical","Physical Analysis", choices=c("Temperature","Salinity"), selected=NULL))),
+                                                               shiny::selectInput("physical","Physical Analysis", choices=c("Temperature","Salinity"), selected=NULL)),
+                                             
+                                             conditionalPanel(condition="input.tabselected==2 && \"Chemical\" == input.type",
+                                                              shiny::selectInput("chemical", "Chemical Analysis", choices=c("Nitrate", "Silicate","Phosphate"), selected="Nitrate")),
+                                             
+                                             conditionalPanel(condition="input.tabselected==2 && \"Biological\" == input.type",
+                                                              shiny::selectInput("biological", "Biolgical Analysis", choices=c("Chlorophyll", "Phytoplankton abundance","Zooplankton abundance", "Zooplankton biomass"), selected="Chlorophyll")
+)),
                                                           mainPanel(
 tabsetPanel(type="tab",
             tabPanel("Map", value=1, leaflet::leafletOutput("map")),
             tabPanel("Parameters", value=2),
 id = "tabselected"),
 
-                                                                    conditionalPanel(condition="input.tabselected==2 && \"Temperature\" == input.physical",
+                                                                    conditionalPanel(condition="input.tabselected==2 && input.type == \"Physical\" && \"Temperature\" == input.physical",
                                                                                      plotOutput("temperature1"),
                                                                                      plotOutput("temperature2"),
                                                                                      plotOutput("temperature3")
 
+                                                                                     ),
+                                                                    conditionalPanel(condition="input.tabselected==2 && input.type == \"Physical\" && \"Salinity\" == input.physical",
+                                                                                     plotOutput("salinity1"),
+                                                                                     plotOutput("salinity2"),
+                                                                                     plotOutput("salinity3")
+
+                                                                                     ),
+
+                                                                    conditionalPanel(condition="input.tabselected == 2 && input.type == \"Chemical\" && \"Nitrate\" == input.chemical",
+                                                                                     plotOutput("nitrate1"),
+                                                                                     plotOutput("nitrate2")
                                                                                      )
 
                                                           )))
@@ -128,6 +146,41 @@ shinyServer <- shiny::shinyServer(function(input, output){
                     plot(HL2s,HL2d, ylim=rev(range(HL2d,P5d, na.rm=TRUE)), xlim=range(HL2s, P5s, na.rm=TRUE), xlab = "Salinity", ylab="Depth", pch=20, type="p", main="Occupations Stations Salinity")
                     points(P5s, P5d, pch=20, col="red")
                     legend("bottomleft", c("HL2", "P5"), pch=c(20,20), col=c("black", "red"))
+                })
+
+
+                output$nitrate1 <- renderPlot({
+                    CSLn <- Discrete_Occupations_Sections$nitrate[which(Discrete_Occupations_Sections$station %in% c("CSL1",  "CSL2",  "CSL3",  "CSL4",  "CSL5",  "CSL6"))]
+CSLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("CSL1",  "CSL2",  "CSL3",  "CSL4",  "CSL5",  "CSL6"))]
+## LL
+LLn <- Discrete_Occupations_Sections$nitrate[which(Discrete_Occupations_Sections$station %in% c("LL1",   "LL2",   "LL4",   "LL5",   "LL6", "LL7",   "LL8",  "LL3",   "LL9"))]
+LLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("LL1",   "LL2",   "LL4",   "LL5",   "LL6", "LL7",   "LL8",  "LL3",   "LL9"))]
+## HL
+HLn <- Discrete_Occupations_Sections$nitrate[which(Discrete_Occupations_Sections$station %in% c("HL1","HL2","HL3", "HL4", "HL5", "HL6","HL7","HL5.5", "HL3.3", "HL6.3", "HL6.7"))]
+HLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("HL1","HL2","HL3", "HL4", "HL5", "HL6","HL7","HL5.5", "HL3.3", "HL6.3", "HL6.7"))]
+#BBL
+BBLn <- Discrete_Occupations_Sections$nitrate[which(Discrete_Occupations_Sections$station %in% c("BBL1","BBL2", "BBL3","BBL4","BBL5","BBL6","BBL7"))]
+BBLd <- Discrete_Occupations_Sections$depth[which(Discrete_Occupations_Sections$station %in% c("BBL1","BBL2", "BBL3","BBL4","BBL5","BBL6","BBL7"))]
+
+plot(LLn,LLn, ylim=rev(range(CSLd,LLd, HLd, BBLd, na.rm=TRUE)), xlim=range(CSLn,LLn, HLn, BBLn, na.rm=TRUE), xlab = "Nitrate", ylab="Depth", pch=20, type="p", main="Occupations Sections Nitrate")
+points(HLn, HLd, pch=20, col="red")
+points(BBLn, BBLd, pch=20, col="green")
+points(CSLn, CSLd, pch=20, col="blue")
+legend("bottomleft", c("LL", "HL", "BBL", "CSL"), pch=c(20,20,20,20), col=c("black", "red", "green", "blue"))
+                  })
+                
+
+                output$nitrate2 <- renderPlot({
+                    #HL2
+                    HL2n <- Discrete_Occupations_Stations$salinity[which(Discrete_Occupations_Stations$station == "HL2")]
+                    HL2d <- Discrete_Occupations_Stations$depth[which(Discrete_Occupations_Stations$station == "HL2")]
+                    # P5
+                    P5n <- Discrete_Occupations_Stations$salinity[which(Discrete_Occupations_Stations$station == "P5")]
+                    P5d <- Discrete_Occupations_Stations$depth[which(Discrete_Occupations_Stations$station == "P5")]
+                    plot(HL2n,HL2d, ylim=rev(range(HL2d,P5d, na.rm=TRUE)), xlim=range(HL2n, P5n, na.rm=TRUE), xlab = "Nitrate", ylab="Depth", pch=20, type="p", main="Occupations Stations Nitrate")
+                    points(P5n, P5d, pch=20, col="red")
+                    legend("bottomleft", c("HL2", "P5"), pch=c(20,20), col=c("black", "red"))
+
                 })
 
 
