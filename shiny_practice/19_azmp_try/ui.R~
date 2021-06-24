@@ -2,19 +2,43 @@ library(shiny)
 library(azmpdata)
 library(leaflet)
 
+library(shiny)
+
 shinyUI(fluidPage(
 
                   titlePanel("GUI for azmpdata package."),
-                  shiny::mainPanel(
+                  sidebarLayout(
+                                sidebarPanel(
+                                             conditionalPanel(condition="input.tabselected==2", shiny::radioButtons("type", "Select your type of parameter", choices=c("Physical", "Chemical", "Biological"), selected=c("Physical")))),
+                                                          mainPanel(
 tabsetPanel(type="tab",
             tabPanel("Map", value=1, leaflet::leafletOutput("map")),
             tabPanel("Parameters", value=2, plotOutput("parameters")),
 id = "tabselected")
 
-                                                          )
-                                                          ))
-# First, add tabPanel in mainPanel(tabsetPanel)
-# then add id for that tabPanel
-# Then add conditionalPanel for sidebar Panel if it is selected to add the choices in, which is based on the id for the tabPanel
-# Then tell it what to do in server.R
+                                                          ))))
 
+
+
+
+
+
+
+
+
+
+#FIXME: stop()
+
+#shinyUI(fluidPage(
+#
+#                  titlePanel("GUI for azmpdata package."),
+#                  sidebarLayout(
+#                                sidebarPanel(
+#                                             conditionalPanel(condition="input.tabselected == 2"), shiny::radioButtons("type", "Type", choices=c("Physical", "Chemical", "Biological"), selected="Physical")),
+#                  shiny::mainPanel(
+#tabsetPanel(type="tab",
+#            tabPanel("Map", value=1, leaflet::leafletOutput("map")),
+#            tabPanel("Parameters", value=2, plotOutput("parameters")),
+#id = "tabselected")
+#
+#                                                          ))))

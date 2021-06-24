@@ -1,9 +1,7 @@
-library(argoFloats)
-
 shinyServer(function(input, output){
-                output$map <- renderPlot({
-                    data("index")
-                    plot(index, col=input$color) })
+                output$map <- renderLeaflet({
+                    azmpdata::azmpmap()
+                   })
                 output$parameters <- renderPlot({
                     plot(1:10, col=input$color, pch=input$pch)
                 })
