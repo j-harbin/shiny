@@ -23,8 +23,13 @@ shinyUI <- fluidPage(
                                                           mainPanel(
 tabsetPanel(type="tab",
             tabPanel("Map", value=1, leaflet::leafletOutput("map")),
-            tabPanel("Parameters", value=2, plotOutput("temperature1")),
-id = "tabselected")
+            tabPanel("Parameters", value=2),
+id = "tabselected"),
+
+                                                                    conditionalPanel(condition="input.tabselected==2 && \"Temperature\" == input.physical",
+                                                                                     plotOutput("temperature1")
+
+                                                                                     )
 
                                                           )))
 
